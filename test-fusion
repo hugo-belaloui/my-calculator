@@ -1,6 +1,6 @@
 import re
 
-# ------------------ HISTORIQUE ------------------
+# history
 
 history = []
 
@@ -10,7 +10,7 @@ def add_to_history(operation, result):
         folder.write(f"{operation} = {result}\n")
 
 
-# ------------------ CALCUL AVEC PRIORITÉ ------------------
+# calcul
 
 def convert_int_float(value):
     try:
@@ -27,7 +27,7 @@ def parse_string_calculation(chain):
 
 def priority_calculation(parsed_chain):
     i = 0
-    # priorité * /
+    
     while i < len(parsed_chain):
         if parsed_chain[i] in ['*', '/']:
             a = parsed_chain[i-1]
@@ -46,7 +46,7 @@ def priority_calculation(parsed_chain):
             i += 1
 
     i = 0
-    # puis + -
+    
     while i < len(parsed_chain):
         if parsed_chain[i] in ['+', '-']:
             a = parsed_chain[i-1]
@@ -65,10 +65,10 @@ def priority_calculation(parsed_chain):
     return parsed_chain[0]
 
 
-# ------------------ MENU ------------------
+# menu
 
 while True:
-    print("\n1. Calculer une expression")
+    print("\n1. Enter your calculation")
     print("2. View history")
     print("3. Clear history")
     print("4. Exit")
@@ -98,7 +98,7 @@ while True:
         continue
 
     if choice == 1:
-        expression = input("Enter your calculation (ex: 3+5*2-4/2): ")
+        expression = input("Enter your calculation : ")
 
         try:
             parsed = parse_string_calculation(expression)
@@ -107,5 +107,5 @@ while True:
             print(f"Result : {expression} = {result}")
             add_to_history(expression, result)
 
-        except Exception as e:
+        except ValueError:
             print("Invalid expression.")
