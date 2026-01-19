@@ -113,9 +113,9 @@ entry = tk.Entry(root, font=("Arial", 18), justify="right")
 entry.pack(fill="x", padx=10, pady=10)
 
 buttons = [
-    ('7', '8', '9', '/'),
+    ('1', '2', '3', '/'),
     ('4', '5', '6', '*'),
-    ('1', '2', '3', '-'),
+    ('7', '8', '9', '-'),
     ('0', '.', '=', '+')
 ]
 
@@ -141,3 +141,4 @@ tk.Button(root, text="History", width=22, height=2, command=show_history).pack(p
 tk.Button(root, text="Clear History", width=22, height=2, command=clear_history).pack(pady=2)
 
 root.mainloop()
+
