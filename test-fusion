@@ -1,0 +1,111 @@
+import re
+
+# history
+
+history = []
+
+def add_to_history(operation, result):
+    history.append(f"{operation} = {result}")
+    with open("history.txt", "a") as folder:
+        folder.write(f"{operation} = {result}\n")
+
+
+# calcul
+
+def convert_int_float(value):
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return value
+
+def parse_string_calculation(chain):
+    parsed = re.findall(r'(?<!\d)-?\d+\.?\d*|[-+*/]', chain)
+    return [convert_int_float(x) for x in parsed]
+
+def priority_calculation(parsed_chain):
+    i = 0
+    
+    while i < len(parsed_chain):
+        if parsed_chain[i] in ['*', '/']:
+            a = parsed_chain[i-1]
+            b = parsed_chain[i+1]
+
+            if parsed_chain[i] == '*':
+                result = a * b
+            else:
+                if b == 0:
+                    return "Error : cannot divide by 0"
+                result = a / b
+
+            parsed_chain[i-1:i+2] = [result]
+            i -= 1
+        else:
+            i += 1
+
+    i = 0
+    
+    while i < len(parsed_chain):
+        if parsed_chain[i] in ['+', '-']:
+            a = parsed_chain[i-1]
+            b = parsed_chain[i+1]
+
+            if parsed_chain[i] == '+':
+                result = a + b
+            else:
+                result = a - b
+
+            parsed_chain[i-1:i+2] = [result]
+            i -= 1
+        else:
+            i += 1
+
+    return parsed_chain[0]
+
+
+# menu
+
+while True:
+    print("\n1. Enter your calculation")
+    print("2. View history")
+    print("3. Clear history")
+    print("4. Exit")
+
+    try:
+        choice = int(input("Choose an option (1-4): "))
+    except ValueError:
+        print("Please enter a valid number.")
+        continue
+
+    if choice == 4:
+        break
+
+    if choice == 3:
+        history.clear()
+        open("history.txt", "w").close()
+        print("History cleared.")
+        continue
+
+    if choice == 2:
+        print("\nHistory:")
+        if not history:
+            print("No operations yet.")
+        else:
+            for h in history:
+                print(h)
+        continue
+
+    if choice == 1:
+        expression = input("Enter your calculation : ")
+
+        try:
+            parsed = parse_string_calculation(expression)
+            result = priority_calculation(parsed)
+
+            print(f"Result : {expression} = {result}")
+            add_to_history(expression, result)
+
+        except ValueError:
+            print("Invalid expression.")
