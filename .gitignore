@@ -1,2 +1,4 @@
 history.txt
 test-fusion
+__pycache__/
+*.pyc
